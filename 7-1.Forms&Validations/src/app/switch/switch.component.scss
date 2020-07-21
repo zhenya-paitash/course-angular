@@ -1,0 +1,17 @@
+.switch {
+  display: inline-block;
+
+  button {
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    color: black;
+    background: none;
+    border: none;
+    outline: none;
+
+    &.active {
+      background: purple;
+      color: #fff;
+    }
+  }
+}

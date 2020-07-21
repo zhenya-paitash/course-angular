@@ -1,0 +1,18 @@
+<div class="container">
+  <h1>Angular Services</h1>
+  <hr>
+  <div class="service">
+    <p>Counter: {{ counter.counter }}</p>
+    <button (click)="counter.increase()">+</button>
+    <button (click)="counter.decrease()">-</button>
+  </div>
+  <hr>
+  <div class="service">
+    <p>Counter Second: {{ counterSecond.counter }}</p>
+    <button (click)="counterSecond.increase()">+</button>
+    <button (click)="counterSecond.decrease()">-</button>
+  </div>
+  <hr>
+
+  <app-counter></app-counter>
+</div>

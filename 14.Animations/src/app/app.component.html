@@ -1,0 +1,28 @@
+<button (click)="animateBox()">Animate</button>
+<button (click)="myBoxState = 'special'">Special State</button>
+<button (click)="boxVisible = !boxVisible">Show / Hide</button>
+<hr>
+<div class="wrap">
+
+  <app-animate></app-animate>
+
+  <hr>
+
+  <div
+    class="box"
+    *ngIf="boxVisible"
+    [@box]="myBoxState"
+    (@box.start)="logAnimation($event)"
+    (@box.done)="logDoneAnimation($event)"
+  >
+    <h4>{{ myBoxState | uppercase }}</h4>
+  </div>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aut, beatae, dolores eaque eos explicabo id iste
+    libero quaerat quibusdam quod sed sit tempora velit voluptas voluptates voluptatum? A alias at harum ipsa molestias
+    pariatur placeat quia voluptatem. Ad cumque eius enim eos est expedita explicabo fugit inventore ipsum iste iure
+    libero magni maiores maxime, minima nobis non numquam placeat praesentium rem repellendus similique sint sunt ullam
+    velit vitae voluptatem. Accusantium alias amet, cumque deleniti doloremque, dolorum, expedita fugit iure labore
+    libero molestiae molestias odio officiis quis rerum sed ut vitae. Accusantium aliquam assumenda earum ipsa obcaecati
+    odit similique voluptates.</p>
+
+</div>

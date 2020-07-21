@@ -1,0 +1,12 @@
+<div class="switch">
+
+  <button
+    [class.active]="state === 'on'"
+    (click)="setState('on')"
+  >ON</button>
+  <button
+    [class.active]="state === 'off'"
+    (click)="setState('off')"
+  >OFF</button>
+
+</div>

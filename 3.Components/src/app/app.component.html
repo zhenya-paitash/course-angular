@@ -1,0 +1,22 @@
+<div class="container">
+  <h1>Angular Component</h1>
+  <h2>Тест инкапсуляции стилей</h2>
+
+
+  <app-post-form (onAdd)="updatePosts($event)"></app-post-form>
+
+  <hr>
+
+  <app-post *ngFor="let p of posts" [post]="p" (onRemove)="removePost($event)">
+    <div #info>
+      <small class="redCheck" *ngIf="p.text.length < 10; else long">
+        Пост слишком короткий
+      </small>
+
+      <ng-template #long>
+        <small class="greenCheck">Пост соответствует норме</small>
+      </ng-template>
+    </div>
+  </app-post>
+
+</div>
