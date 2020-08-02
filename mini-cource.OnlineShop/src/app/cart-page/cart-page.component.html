@@ -1,0 +1,68 @@
+<div class="container" *ngIf="cartProducts.length > 0; else empty">
+  <h2 class="text-center">Your cart product:</h2>
+
+  <table>
+    <tbody>
+    <tr *ngFor="let cartProduct of cartProducts; let idx = index">
+      <td>{{ idx+1 }}. {{ cartProduct.type | titlecase }}</td>
+      <td>{{ cartProduct.title }}</td>
+      <td><button class="btn btn-danger" (click)="deleteProduct(cartProduct)">Delete</button></td>
+      <td>{{ cartProduct.price | number }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <b class="right">Total price: {{ totalPrice | number }} BYN</b>
+
+  <h2 class="text-center">Delivery:</h2>
+
+  <div *ngIf="added" class="text-center text-danger">{{ added }}</div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <!--  name input-->
+    <div class="form-control">
+      <label for="name">Name:</label>
+      <input id="name" type="text" formControlName="name">
+      <div *ngIf="form.get('name').touched && form.get('name').invalid" class="validation">
+        <small *ngIf="form.get('name').errors.required">Enter your name</small>
+      </div>
+    </div>
+    <!--  phone input-->
+    <div class="form-control">
+      <label for="phone">Phone:</label>
+      <input id="phone" type="text" formControlName="phone">
+      <div *ngIf="form.get('phone').touched && form.get('phone').invalid" class="validation">
+        <small *ngIf="form.get('phone').errors.required">Enter your phone number</small>
+      </div>
+    </div>
+    <!--  address input-->
+    <div class="form-control">
+      <label for="address">Address:</label>
+      <input id="address" type="text" formControlName="address">
+      <div *ngIf="form.get('address').touched && form.get('address').invalid" class="validation">
+        <small *ngIf="form.get('address').errors.required">Enter your address</small>
+      </div>
+    </div>
+    <!--  payment method choose-->
+    <div class="form-control">
+      <label for="payment">Payment method:</label>
+      <select name="payment" id="payment" formControlName="payment">
+        <option value="cash">Cash</option>
+        <option value="card">Card</option>
+      </select>
+    </div>
+
+    <!--  submit form-->
+    <button
+      type="submit"
+      class="btn btn-primary btn-block"
+      [disabled]="form.invalid || submitted"
+    >Add product</button>
+  </form>
+
+</div>
+
+<ng-template #empty>
+  <h2 class="text-center">Cart is empty</h2>
+</ng-template>
