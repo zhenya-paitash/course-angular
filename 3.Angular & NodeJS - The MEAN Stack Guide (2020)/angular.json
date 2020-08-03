@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "MEAN-stack-guide": {
+    "MEAN-guide": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/MEAN-stack-guide",
+            "outputPath": "dist/MEAN-guide",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -66,18 +66,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "MEAN-stack-guide:build"
+            "browserTarget": "MEAN-guide:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "MEAN-stack-guide:build:production"
+              "browserTarget": "MEAN-guide:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "MEAN-stack-guide:build"
+            "browserTarget": "MEAN-guide:build"
           }
         },
         "test": {
@@ -114,15 +114,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "MEAN-stack-guide:serve"
+            "devServerTarget": "MEAN-guide:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "MEAN-stack-guide:serve:production"
+              "devServerTarget": "MEAN-guide:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "MEAN-stack-guide"
+  "defaultProject": "MEAN-guide"
 }
