@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgForm } from "@angular/forms";
+import { NgForm } from '@angular/forms';
 
 import { Post } from '../../shared/interfaces';
 import { PostsService } from '../post.service';
@@ -10,8 +10,8 @@ import { PostsService } from '../post.service';
   styleUrls: ['./post-create.component.scss']
 })
 export class PostCreateComponent {
-  enteredTitle = "";
-  enteredContent = "";
+  enteredTitle = '';
+  enteredContent = '';
 
   constructor(public postsService: PostsService) {}
 
@@ -19,7 +19,7 @@ export class PostCreateComponent {
     if (form.invalid) return;
 
     const newPost: Post = form.value;
-    this.postsService.addPost(newPost)
+    this.postsService.addPost(newPost);
     form.resetForm();
   }
 }
