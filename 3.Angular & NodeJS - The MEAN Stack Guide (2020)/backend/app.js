@@ -1,14 +1,14 @@
-// ===================== imports ===========================
+// IMPORT -------------------------------------------------------------------------
 const
   express = require('express'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
-  Post = require('./models/post-model'),
+  postRoutes = require('./routes/posts'),
   env = require('dotenv'),
   app = express();
 
 
-// ===================== config ===========================
+// SETUP --------------------------------------------------------------------------
 env.config();
 mongoose.connect(process.env.DB_URI)
   .then(() => console.log('Connection success!'))
@@ -25,37 +25,9 @@ app.use((req, res, next) => {
 });
 
 
-// ===================== URL ===========================
-app.get('/api/posts', (req, res) => {
-  Post.find().then(posts => {
-    res.status(200).json({
-      message: 'Posts fetched successfully!',
-      posts
-    });
-  });
-});
-
-app.post('/api/posts', (req, res) => {
-  const post = new Post({
-    title:    req.body.title,
-    content:  req.body.content
-  });
-  post.save().then(newPost => {
-    res.status(201).json({
-      message: 'Post added successfully',
-      postId: newPost._id
-    });
-  });
-});
-
-app.delete('/api/posts/:id', (req, res) => {
-  Post.deleteOne({_id: req.params.id})
-    .then(deleted => {
-      console.log(deleted);
-      res.status(200).json({message: 'Post deleted!'});
-    })
-});
+// ROUTE --------------------------------------------------------------------------
+app.use('/api/posts', postRoutes);
 
 
-// ===================== export ===========================
+// EXPORT -------------------------------------------------------------------------
 module.exports = app;
