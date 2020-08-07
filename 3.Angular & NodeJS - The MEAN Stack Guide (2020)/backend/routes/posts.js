@@ -1,11 +1,11 @@
-// IMPORTS ------------------------------------------------------------------------
+// IMPORT -------------------------------------------------------------------------
 const
   router = require('express').Router(),
   Post = require('../models/post-model');
 
 
 // URL ----------------------------------------------------------------------------
-router.get('', (req, res) => {
+router.get('/', (req, res) => {
   Post.find().then(posts => {
     res.status(200).json({
       message: 'Posts fetched successfully!',
@@ -25,7 +25,7 @@ router.get('/:id', (req, res) => {
     })
 });
 
-router.post('', (req, res) => {
+router.post('/', (req, res) => {
   const post = new Post({
     _id:      req.body.id,
     title:    req.body.title,
@@ -56,8 +56,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   Post.deleteOne({_id: req.params.id})
-    .then(del => {
-      // console.log(del);
+    .then(deleted => {
       res.status(200).json({message: 'Post deleted!'});
     })
 });
