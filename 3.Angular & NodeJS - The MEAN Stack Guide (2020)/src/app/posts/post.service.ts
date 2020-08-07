@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {map} from 'rxjs/operators';
 
 import { Post } from '../shared/interfaces';
 import { environment } from '../../environments/environment';
@@ -16,7 +17,19 @@ export class PostsService {
 
   getPosts() {
     this.http
-      .get<{message: string, posts: Post[]}>(`${environment.server}/api/posts`)
+      .get<{message: string, posts: any}>(`${environment.server}/api/posts`)
+      .pipe(map((data) => {
+        return {
+          message:  data.message,
+          posts:    data.posts.map(post => {
+            return {
+              id:       post._id,
+              title:    post.title,
+              content:  post.content
+            };
+          })
+        };
+      }))
       .subscribe((postData) => {
         this.posts = postData.posts;
         this.postsUpdated.next([...this.posts]);
@@ -28,10 +41,18 @@ export class PostsService {
   }
 
   addPost(post: Post) {
-    this.http.post<{message: string}>(`${environment.server}/api/posts`, post)
+    this.http.post<{message: string, postId: string}>(`${environment.server}/api/posts`, post)
       .subscribe((resData) => {
-        console.log(resData.message);
+        post.id = resData.postId;
         this.posts.push(post);
+        this.postsUpdated.next([...this.posts]);
+      });
+  }
+
+  deletePost(id: string) {
+    this.http.delete(`${environment.server}/api/posts/${id}`)
+      .subscribe(() => {
+        this.posts = this.posts.filter(i => i.id !== id);
         this.postsUpdated.next([...this.posts]);
       });
   }
