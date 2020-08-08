@@ -13,7 +13,7 @@ import { PostsService } from '../post.service';
 export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   private postsSub: Subscription;
-  isLoading: boolean = false;
+  isLoading = false;
   constructor(public postsService: PostsService) {}
 
   ngOnInit(): void {

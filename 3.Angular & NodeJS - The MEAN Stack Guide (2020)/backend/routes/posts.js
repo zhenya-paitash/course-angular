@@ -1,10 +1,34 @@
 // IMPORT -------------------------------------------------------------------------
 const
   router = require('express').Router(),
-  Post = require('../models/post-model');
+  Post = require('../models/post-model'),
+  multer = require('multer');
+
+
+// SETUP --------------------------------------------------------------------------
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg'
+};
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    let error = new Error('Invalid mime type');
+    if (isValid) error = null;
+    callback(error, 'backend/images');
+  },
+  filename: (req, file, cb) => {
+    const name = file.originalname.toLowerCase().split(' ').join('-');
+    const ext = MIME_TYPE_MAP[file.mimetype];
+    cb(null, `${name}-${Date.now()}.${ext}`);
+  }
+});
 
 
 // URL ----------------------------------------------------------------------------
+// getAll:
 router.get('/', (req, res) => {
   Post.find().then(posts => {
     res.status(200).json({
@@ -14,49 +38,67 @@ router.get('/', (req, res) => {
   });
 });
 
+// getById:
 router.get('/:id', (req, res) => {
   Post.findById(req.params.id)
     .then(post => {
-      if (post) {
-        res.status(200).json(post)
-      } else {
-        res.status(404).json({message: 'Post not found!'})
-      }
+      post
+        ? res.status(200).json(post)
+        : res.status(404).json({message: 'Post not found!'});
+      // if (post) {
+      //   res.status(200).json(post)
+      // } else {
+      //   res.status(404).json({message: 'Post not found!'})
+      // }
     })
 });
 
-router.post('/', (req, res) => {
+// createPost:
+router.post('/', multer({storage}).single('image'), (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
   const post = new Post({
-    _id:      req.body.id,
-    title:    req.body.title,
-    content:  req.body.content
+    _id:       req.body.id,
+    title:     req.body.title,
+    content:   req.body.content,
+    imagePath: url + '/images/' + req.file.filename
   });
   post.save().then(newPost => {
     res.status(201).json({
       message: 'Post added successfully',
-      postId: newPost._id
+      post: {
+        ...newPost,
+        id: newPost._id,
+      }
     });
   });
 });
 
-router.put('/:id', (req, res) => {
+// updatePost:
+router.put('/:id', multer({storage}).single('image'), (req, res) => {
+  let imagePath = req.body.imagePath;
+  if (req.file) {
+    const url = req.protocol + '://' + req.get('host');
+    imagePath = url + '/images/' + req.file.filename;
+  }
+
   const post = new Post({
-    _id:      req.body.id,
-    title:    req.body.title,
-    content:  req.body.content
+    _id:       req.body.id,
+    title:     req.body.title,
+    content:   req.body.content,
+    imagePath
   });
   Post.updateOne({_id: req.params.id}, post)
-    .then(result => {
-      console.log(result);
+    .then(upd => {
       res.status(200).json({
         message: `Update post ${req.params.id} successful!`
       })
     })
 });
 
+// deletePost:
 router.delete('/:id', (req, res) => {
   Post.deleteOne({_id: req.params.id})
-    .then(deleted => {
+    .then(del => {
       res.status(200).json({message: 'Post deleted!'});
     })
 });

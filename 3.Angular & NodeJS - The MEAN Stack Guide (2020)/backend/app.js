@@ -1,6 +1,7 @@
 // IMPORT -------------------------------------------------------------------------
 const
   express = require('express'),
+  path = require('path'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
   postRoutes = require('./routes/posts'),
@@ -11,10 +12,12 @@ const
 // SETUP --------------------------------------------------------------------------
 env.config();
 mongoose.connect(process.env.DB_URI)
-  .then(() => console.log('Connection success!'))
-  .catch(() => console.log('Connection failed!'));
+  .then(() => console.log('\x1b[32m%s\x1b[0m', 'Connection success!'))
+  .catch(() => console.log('\x1b[31m%s\x1b[0m', 'Connection failed!'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use('/images', express.static(path.join('backend/images')));
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers',
