@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 
 import { Post } from '../../shared/interfaces';
@@ -12,6 +12,7 @@ import { PostsService } from '../post.service';
   styleUrls: ['./post-create.component.scss']
 })
 export class PostCreateComponent implements OnInit {
+  form: FormGroup;
   enteredTitle = '';
   enteredContent = '';
   post: Post;
@@ -24,6 +25,12 @@ export class PostCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      title: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)]
+      }),
+      content: new FormControl(null, Validators.required)
+    });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postID')) {
         this.mode = 'edit';
@@ -33,10 +40,14 @@ export class PostCreateComponent implements OnInit {
           .subscribe(post => {
             this.isLoading = false;
             this.post = {
-              id: post._id,
-              title: post.title,
-              content: post.content
+              id:       post._id,
+              title:    post.title,
+              content:  post.content
             };
+            this.form.setValue({
+              title:    this.post.title,
+              content:  this.post.content,
+            })
           });
       } else {
         this.mode = 'create';
@@ -45,18 +56,18 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
-  onSavePost(form: NgForm) {
-    if (form.invalid) return;
+  submit() {
+    if (this.form.invalid) return;
 
     this.isLoading = true;
     if (this.mode === 'create') {
-      const newPost: Post = form.value;
+      const newPost: Post = this.form.value;
       this.postsService.addPost(newPost);
     } else {
       this.postsService.updatePost(
-        this.postID, form.value.title, form.value.content
+        this.postID, this.form.value.title, this.form.value.content
       );
     }
-    form.resetForm();
+    this.form.reset();
   }
 }
