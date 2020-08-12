@@ -11,7 +11,10 @@ const
 
 // SETUP --------------------------------------------------------------------------
 env.config();
-mongoose.connect(process.env.DB_URI)
+mongoose.connect(process.env.DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('\x1b[32m%s\x1b[0m', 'Connection success!'))
   .catch(() => console.log('\x1b[31m%s\x1b[0m', 'Connection failed!'));
 app.use(bodyParser.json());

@@ -11,15 +11,17 @@ import {environment} from '../../environments/environment';
 @Injectable({providedIn: 'root'})
 export class PostsService {
   private posts: Post[] = [];
-  private postsUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<{ posts: Post[], postCount: number }>();
   constructor(
     private http: HttpClient,
     private router: Router
   ) {}
 
-  getPosts() {
+  getPosts(postsPerPage: number, curPage: number) {
+    const queryParams = `?pagesize=${postsPerPage}&page=${curPage}`;
+
     this.http
-      .get<{message: string, posts: any}>(
+      .get<{message: string, posts: any, maxPosts: number}>(
         `${environment.server}/api/posts`
       )
       .pipe(map((data) => {
@@ -32,12 +34,13 @@ export class PostsService {
               content:   post.content,
               imagePath: post.imagePath
             };
-          })
+          }),
+          maxPosts: data.maxPosts
         };
       }))
       .subscribe((postData) => {
         this.posts = postData.posts;
-        this.postsUpdated.next([...this.posts]);
+        this.postsUpdated.next({posts: [...this.posts], postCount: postData.maxPosts});
       });
   }
 
@@ -62,14 +65,6 @@ export class PostsService {
         `${environment.server}/api/posts`, postData
       )
       .subscribe(resData => {
-        const post: Post = {
-          id: resData.post.id,
-          title,
-          content,
-          imagePath : resData.post.imagePath
-        };
-        this.posts.push(post);
-        this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']);
       });
   }
@@ -89,21 +84,12 @@ export class PostsService {
     this.http
       .put(`${environment.server}/api/posts/${id}`, postData)
       .subscribe(resolve => {
-        const newPosts = [...this.posts];
-        newPosts[newPosts.findIndex(i => i.id === id)] = {
-          id, title, content, imagePath: ''
-        };
-        this.posts = newPosts;
-        this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']);
       });
   }
 
   deletePost(id: string) {
-    this.http.delete(`${environment.server}/api/posts/${id}`)
-      .subscribe(() => {
-        this.posts = this.posts.filter(i => i.id !== id);
-        this.postsUpdated.next([...this.posts]);
-      });
+    return this.http
+      .delete(`${environment.server}/api/posts/${id}`);
   }
 }
