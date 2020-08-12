@@ -22,7 +22,7 @@ export class PostsService {
 
     this.http
       .get<{message: string, posts: any, maxPosts: number}>(
-        `${environment.server}/api/posts`
+        `${environment.server}/api/posts${queryParams}`
       )
       .pipe(map((data) => {
         return {
