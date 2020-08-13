@@ -2,7 +2,8 @@
 const
   router = require('express').Router(),
   Post = require('../models/post-model'),
-  multer = require('multer');
+  multer = require('multer'),
+  authCheck = require('../middleware/auth-check');
 
 
 // SETUP --------------------------------------------------------------------------
@@ -68,7 +69,7 @@ router.get('/:id', (req, res) => {
 });
 
 // createPost:
-router.post('/', multer({storage}).single('image'), (req, res) => {
+router.post('/', authCheck, multer({storage}).single('image'), (req, res) => {
   const url = req.protocol + '://' + req.get('host');
   const post = new Post({
     _id:       req.body.id,
@@ -88,7 +89,7 @@ router.post('/', multer({storage}).single('image'), (req, res) => {
 });
 
 // updatePost:
-router.put('/:id', multer({storage}).single('image'), (req, res) => {
+router.put('/:id', authCheck, multer({storage}).single('image'), (req, res) => {
   let imagePath = req.body.imagePath;
   if (req.file) {
     const url = req.protocol + '://' + req.get('host');
@@ -110,7 +111,7 @@ router.put('/:id', multer({storage}).single('image'), (req, res) => {
 });
 
 // deletePost:
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authCheck, (req, res) => {
   Post.deleteOne({_id: req.params.id})
     .then(del => {
       res.status(200).json({message: 'Post deleted!'});
