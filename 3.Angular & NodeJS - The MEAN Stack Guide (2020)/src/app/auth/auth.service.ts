@@ -43,7 +43,9 @@ export class AuthService {
     this.http
       .post(`${environment.server}/api/user/signup`, authData)
       .subscribe(response => {
-        console.log(response);
+        this.router.navigate(['/login']);
+      }, err => {
+        this.authStatusListener.next(false);
       });
   }
 
@@ -51,6 +53,7 @@ export class AuthService {
     const authData: AuthData = {email, password};
     this.http
       .post<{token: string, expiresIn: number, userId: string}>(`${environment.server}/api/user/login`, authData)
+      // .pipe()
       .subscribe(result => {
         const token = result.token;
         this.token = token;
@@ -65,6 +68,8 @@ export class AuthService {
           this.saveAuthData(token, expDate, this.userId);
           this.router.navigate(['/']);
         }
+      }, error => {
+        this.authStatusListener.next(false);
       });
   }
 

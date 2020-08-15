@@ -37,6 +37,8 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.totalPosts = postData.postCount;
         this.posts = postData.posts;
+      }, err => {
+        this.isLoading = false;
       });
     this.isAuthenticated = this.authService.getIsAuth();
     this.authSub = this.authService.getAuthStatusListener()
@@ -62,6 +64,8 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.postsService.deletePost(postId).subscribe(() => {
       this.postsService.getPosts(this.postsPerPage, this.curPage);
+    }, err => {
+      this.isLoading = false;
     });
   }
 
