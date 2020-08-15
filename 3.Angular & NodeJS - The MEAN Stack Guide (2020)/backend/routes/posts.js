@@ -75,7 +75,8 @@ router.post('/', authCheck, multer({storage}).single('image'), (req, res) => {
     _id:       req.body.id,
     title:     req.body.title,
     content:   req.body.content,
-    imagePath: url + '/images/' + req.file.filename
+    imagePath: url + '/images/' + req.file.filename,
+    creator:   req.userData.id
   });
   post.save().then(newPost => {
     res.status(201).json({
@@ -100,21 +101,28 @@ router.put('/:id', authCheck, multer({storage}).single('image'), (req, res) => {
     _id:       req.body.id,
     title:     req.body.title,
     content:   req.body.content,
+    creator:   req.userData.id,
     imagePath
   });
-  Post.updateOne({_id: req.params.id}, post)
+  Post.updateOne({_id: req.params.id, creator: req.userData.id}, post)
     .then(upd => {
-      res.status(200).json({
-        message: `Update post ${req.params.id} successful!`
-      })
+      if (upd.nModified > 0) {
+        res.status(200).json({message: `Update post ${req.params.id} successful!`})
+      } else {
+        res.status(401).json({message: `Not authorized!`})
+      }
     })
 });
 
 // deletePost:
 router.delete('/:id', authCheck, (req, res) => {
-  Post.deleteOne({_id: req.params.id})
+  Post.deleteOne({_id: req.params.id, creator: req.userData.id})
     .then(del => {
-      res.status(200).json({message: 'Post deleted!'});
+      if (del.n > 0) {
+        res.status(200).json({message: 'Post deleted!'});
+      } else {
+        res.status(401).json({message: `Not authorized!`})
+      }
     })
 });
 

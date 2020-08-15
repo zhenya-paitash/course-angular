@@ -54,11 +54,11 @@ router.post('/login', (req, res) => {
 
       // TOKEN_SECRET_KEY: require('crypto').randomBytes(64).toString('hex')
       const token = jwt.sign(
-        {email:fetchedUser.email, id: fetchedUser._id},
+        {email: fetchedUser.email, id: fetchedUser._id},
         process.env.TOKEN_SECRET_KEY,
         {expiresIn: "1h"}
       );
-      res.status(200).json({token, expiresIn: 3600});
+      res.status(200).json({token, expiresIn: 3600, userId: fetchedUser._id});
     })
     .catch(err => {
       return res.status(401).json({
