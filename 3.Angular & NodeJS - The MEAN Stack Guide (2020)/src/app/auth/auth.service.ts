@@ -6,6 +6,8 @@ import {Router} from '@angular/router';
 import { environment } from '../../environments/environment';
 import { AuthData } from '../shared/interfaces';
 
+const BACKEND_URL = environment.apiUrl + '/user/';
+
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +43,7 @@ export class AuthService {
   createUser(email: string, password: string) {
     const authData: AuthData = {email, password};
     this.http
-      .post(`${environment.server}/api/user/signup`, authData)
+      .post(BACKEND_URL + 'signup', authData)
       .subscribe(response => {
         this.router.navigate(['/login']);
       }, err => {
@@ -52,7 +54,7 @@ export class AuthService {
   login(email: string, password: string) {
     const authData: AuthData = {email, password};
     this.http
-      .post<{token: string, expiresIn: number, userId: string}>(`${environment.server}/api/user/login`, authData)
+      .post<{token: string, expiresIn: number, userId: string}>(BACKEND_URL + 'login', authData)
       // .pipe()
       .subscribe(result => {
         const token = result.token;

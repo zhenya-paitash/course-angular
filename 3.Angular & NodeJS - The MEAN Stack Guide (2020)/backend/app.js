@@ -1,16 +1,21 @@
-// IMPORT -------------------------------------------------------------------------
+// --------------------
+// IMPORT
+// --------------------
 const
-  express = require('express'),
-  path = require('path'),
-  bodyParser = require('body-parser'),
-  mongoose = require('mongoose'),
-  postRoutes = require('./routes/posts'),
-  userRoutes = require('./routes/user'),
-  env = require('dotenv'),
-  app = express();
+  express     = require('express'),
+  path        = require('path'),
+  bodyParser  = require('body-parser'),
+  mongoose    = require('mongoose'),
+  postRoutes  = require('./routes/posts'),
+  userRoutes  = require('./routes/user'),
+  env         = require('dotenv'),
+  app         = express();
 
 
-// SETUP --------------------------------------------------------------------------
+
+// --------------------
+// SETUP
+// --------------------
 env.config();
 mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
@@ -32,10 +37,16 @@ app.use((req, res, next) => {
 });
 
 
-// ROUTE --------------------------------------------------------------------------
-app.use('/api/posts', postRoutes);
+
+// --------------------
+// ROUTE
+// --------------------
 app.use('/api/user',  userRoutes);
+app.use('/api/posts', postRoutes);
 
 
-// EXPORT -------------------------------------------------------------------------
+
+// --------------------
+// EXPORT
+// --------------------
 module.exports = app;

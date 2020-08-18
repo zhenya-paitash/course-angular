@@ -1,0 +1,8 @@
+{
+  "env": {
+    "DB_URI_dev": "****************",
+    "DB_USER_USERNAME_dev": "******",
+    "DB_USER_PASSWORD_dev": "******",
+    "TOKEN_SECRET_KEY_dev": "******"
+  }
+}
