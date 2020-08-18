@@ -2,7 +2,7 @@
 // IMPORT
 // --------------------
 const
-  app     = require("./backend/app"),
+  app     = require("./app"),
   debug   = require("debug")("node-angular"),
   http    = require("http");
 

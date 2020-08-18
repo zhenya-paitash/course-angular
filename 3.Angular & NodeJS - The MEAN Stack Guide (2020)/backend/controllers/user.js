@@ -3,7 +3,7 @@
 // --------------------
 const
   User    = require('../models/user-model'),
-  bcrypt  = require('bcrypt'),
+  bcrypt  = require('bcryptjs'),
   jwt     = require('jsonwebtoken');
 
 

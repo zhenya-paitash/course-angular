@@ -5,7 +5,7 @@ import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
 import { Post } from '../shared/interfaces';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 
 const BACKEND_URL = environment.apiUrl + '/posts/';
 

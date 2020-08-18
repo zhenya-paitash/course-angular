@@ -1,6 +1,6 @@
 {
   "name": "mean-guide",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,8 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "server": "node server.js",
-    "server:dev": "nodemon server.js"
+    "server": "node ./backend/server.js",
+    "server:dev": "nodemon ./backend/server.js"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "~9.1.11",
     "@angular/router": "~9.1.11",
     "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "debug": "latest",
     "dotenv": "^8.2.0",
